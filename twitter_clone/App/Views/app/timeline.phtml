@@ -77,18 +77,34 @@
 						<p><?= $tweet['tweet'] ?></p>
 						<br />
 						<?php if ($tweet['id_usuario'] == $_SESSION['id']) { ?>
-							<?= $tweet['id'] ?>
-							<form action="/remover?id_tweet=<?=$tweet['id']?>" method="get">
 								<div class="col d-flex justify-content-end">
-									<button type="submit" class="btn btn-danger"><small>Remover</small></button>
+									<a href= "/remover?id_tweet=<?=$tweet['id']?>"><button type="submit" class="btn btn-danger"><small>Remover</small></button></a>
 								</div>
-							</form>
 						<?php } ?>
 					</div>
 				</div>
 			<?php } ?>
 
+			<div class="row mt-5">
+			<nav aria-label="...">
+				<ul class="pagination">
+					<li class="page-item">
+					<a class="page-link" href="?pagina=1" tabindex="-1">Primeira</a>
+					</li>
+					<?php for ($i = 1; $i <= $this->view->total_de_paginas ; $i++) { ?>
+						<li class="page-item <?=$this->view->pagina_ativa == $i ? 'active' : ''?>"><a class="page-link" href="?pagina=<?=$i?>"><?=$i?></a></li>
+						<li class="page-item"> 
+					<?php } ?> 
+					
+					<a class="page-link" href="?pagina=<?=$this->view->total_de_paginas?>">Última</a>
+					</li>
+				</ul>
+			</nav>
 		</div>
+
+		</div>
+
+		
 
 
 		<div class="col-md-3">
