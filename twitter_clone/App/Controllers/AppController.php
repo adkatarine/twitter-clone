@@ -68,5 +68,16 @@ class AppController extends Action {
 
         header('Location: /quem_seguir');
     }
+
+    public function remover() {
+        $this->validaAutenticacao();
+
+        echo 'Removendo tweet.';
+        echo $_GET['id_tweet'];
+
+        /*$tweet = Container::getModel('Tweet');
+        $tweet->__set('id_usuario', $_SESSION['id']);*/
+
+    }
 }
 ?> 
