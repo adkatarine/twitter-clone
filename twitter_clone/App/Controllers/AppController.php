@@ -15,6 +15,13 @@ class AppController extends Action {
         $tweet->__set('id_usuario', $_SESSION['id']);
         $this->view->tweets = $tweet->getAll();
 
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id', $_SESSION['id']);
+        $this->view->info_usuario = $usuario->getInfoUsuario();
+        $this->view->total_tweets = $usuario->getTotalTweets();
+        $this->view->total_seguindo = $usuario->getTotalSeguindo();
+        $this->view->total_seguidores = $usuario->getTotalSeguidores();
+
         $this->render('timeline');
 	}
 
@@ -38,15 +45,23 @@ class AppController extends Action {
 
     public function quem_seguir() {
         $this->validaAutenticacao();
+
         $pesquisarPor = isset($_GET['pesquisarPor']) ? $_GET['pesquisarPor'] : '';
+        $this->view->pesquisarPor = $pesquisarPor;
+
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id', $_SESSION['id']);
+        $this->view->info_usuario = $usuario->getInfoUsuario();
+        $this->view->total_tweets = $usuario->getTotalTweets();
+        $this->view->total_seguindo = $usuario->getTotalSeguindo();
+        $this->view->total_seguidores = $usuario->getTotalSeguidores();
 
         $usuarios = array();
         if(!empty($pesquisarPor)) {
-            $usuario = Container::getModel('Usuario');
             $usuario->__set('nome', $pesquisarPor);
-            $usuario->__set('id', $_SESSION['id']);
             $usuarios = $usuario->getAll();
         }
+
         $this->view->usuarios = $usuarios;
         $this->render('quemSeguir');
     }
@@ -54,6 +69,7 @@ class AppController extends Action {
     public function acao() {
         $this->validaAutenticacao();
 
+        $this->view->pesquisarPor = $pesquisarPor;
         $acao = isset($_GET['acao']) ? $_GET['acao'] : '';
         $id_usuario_seguindo = isset($_GET['id_usuario']) ? $_GET['id_usuario'] : '';
 
