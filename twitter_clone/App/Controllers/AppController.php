@@ -8,12 +8,16 @@ use MF\Model\Container;
 
 class AppController extends Action {
 
+    /**
+     * Especifica as todas as informações para a timeline.
+     */
 	public function timeline() {
         $this->validaAutenticacao();
 
         $tweet = Container::getModel('Tweet');
         $tweet->__set('id_usuario', $_SESSION['id']);
 
+        // especificações para a paginação.
         $total_registros_pagina = 10;
         $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
         $deslocamento = ($pagina - 1) * $total_registros_pagina;
@@ -33,6 +37,9 @@ class AppController extends Action {
         $this->render('timeline');
 	}
 
+    /**
+     * Salva um tweet e 'atualiza' a timeline.
+     */
     public function tweet() {
         $this->validaAutenticacao();
 
@@ -44,6 +51,9 @@ class AppController extends Action {
         header('Location: /timeline');
     }
 
+    /**
+     * Verifica se o usuário está logado. É uma segurança caso tentem abrir a timeline direto pelo link sem login.
+     */
     private function validaAutenticacao() {
         session_start();
         if(!isset($_SESSION['id']) || empty($_SESSION['id']) || !isset($_SESSION['nome']) || empty($_SESSION['nome'])){
@@ -51,6 +61,9 @@ class AppController extends Action {
         }
     }
 
+    /**
+     * Especifica as informações da tela quemSeguir e caso uma pesquisa seja feita, 'retorna' as pessoas com este nome.
+     */
     public function quem_seguir() {
         $this->validaAutenticacao();
 
@@ -74,6 +87,9 @@ class AppController extends Action {
         $this->render('quemSeguir');
     }
 
+    /**
+     * Verifica se a ação escolhida foi de seguir ou deixar de seguir e a executa.
+     */
     public function acao() {
         $this->validaAutenticacao();
 
@@ -93,17 +109,18 @@ class AppController extends Action {
         header('Location: /quem_seguir');
     }
 
+    /**
+     * Apaga um tweet.
+     */
     public function remover() {
         $this->validaAutenticacao();
 
-        echo 'Removendo tweet.';
-        
-        $acao = isset($_GET['id_tweet']) ? $_GET['id_tweet'] : '';
-        echo $acao;
+        $id = isset($_GET['id_tweet']) ? $_GET['id_tweet'] : '';  
+        $tweet = Container::getModel('Tweet');
+        $tweet->__set('id', $id);
 
-        /*$tweet = Container::getModel('Tweet');
-        $tweet->__set('id_usuario', $_SESSION['id']);*/
-
+        $tweet->apagarTweet();
+        header('Location: /timeline');
     }
 }
 ?> 

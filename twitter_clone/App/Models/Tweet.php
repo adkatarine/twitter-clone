@@ -19,6 +19,9 @@ class Tweet extends Model {
         $this->$atributo = $valor;
     }
 
+    /**
+     * Salva um tweet no banco de dados.
+     */
     public function salvar() {
         $query = 'insert into tweets(id_usuario, tweet)values(:id_usuario, :tweet)';
         $stmt = $this->db->prepare($query);
@@ -56,18 +59,25 @@ class Tweet extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Apaga um tweet do banco de dados.
+     */
     public function apagarTweet() {
         $query = 'delete from 
                             tweets 
-                        where id = :id and id_usuario = :id_usuario';
+                        where id = :id';
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':id', $this->__get('id'));
-        $stmt->bindValue(':id_usuario', $this->__get('id_usuario'));
         $stmt->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return true;
     }
 
+    /**
+     * Retorna tweets especificos (do usuário logado e de quem ele segue) dependendo dos valores recebidos
+     * por parâmetro.
+     * @return array
+     */
     public function getPorPagina($limit, $offset) {
         $query = "select 
             t.id, 
@@ -95,6 +105,9 @@ class Tweet extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Retorna o total de registros (tweets) do usuário logado.
+     */
     public function getTotalRegistros() {
         $query = "select 
             count(*) as total

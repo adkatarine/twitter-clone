@@ -8,6 +8,10 @@ use MF\Model\Container;
 
 class AuthController extends Action {
 
+    /**
+     * Verifica se as credenciais de login estão corretas. Caso esteja, o usuário é redirecionado para a timeline 
+     * do twitter. Se estiverem erradas, conitnua na tela inicial e um alerta de erro é emitido.
+     */
 	public function autenticar() {
         $usuario = Container::getModel('Usuario');
 
@@ -27,6 +31,9 @@ class AuthController extends Action {
         }
 	}
 
+    /**
+     * Finaliza asessão e redireciona para tela inicial de login/cadastro.
+     */
     public function sair() {
         session_start();
         session_destroy();

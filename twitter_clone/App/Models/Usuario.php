@@ -19,6 +19,9 @@ class Usuario extends Model {
         $this->$atributo = $valor;
     }
 
+    /**
+     * Salva as informações de um novo usuário no banco de dados.
+     */
     public function salvar() {
         $query = 'insert into usuarios(nome, email, senha)values(:nome, :email, :senha)';
         $stmt = $this->db->prepare($query);
@@ -30,10 +33,18 @@ class Usuario extends Model {
         return $this;
     }
 
+    /**
+     * Verifica se o atributo recebido possui mais de 3 caracteres, retornando true caso tenha.
+     * @return boolean
+     */
     private function validarQtdCaracter($atributo) {
         return strlen($this->__get($atributo)) < 3;
     }
 
+    /**
+     * Verifica a quantidade de caracteres de cada atributo através do método validarQtdCaracter($atributo).
+     * @return boolean
+     */
     public function validarCadastro() {
         return (self::validarQtdCaracter('nome') or self::validarQtdCaracter('email') or self::validarQtdCaracter('senha')) ? false : true;
     }
@@ -50,6 +61,9 @@ class Usuario extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Verifica se o usuário já possui cadastro, através do email e senha.
+     */
     public function autenticar() {
         $query = 'select id, nome, email from usuarios where email = :email and senha = :senha';
         $stmt = $this->db->prepare($query);
@@ -93,6 +107,9 @@ class Usuario extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Salva no banco de dados esta relação, quem o usuário logado seguiu.
+     */
     public function seguirUsuario($id_usuario_seguindo) {
         $query = 'insert into usuarios_seguidores(id_usuario, id_usuario_seguindo)values(:id_usuario, :id_usuario_seguindo)';
         $stmt = $this->db->prepare($query);
@@ -103,6 +120,9 @@ class Usuario extends Model {
         return true;
     }
 
+    /**
+     * Exclui no banco de dados esta relação, quem o usuário seguia.
+     */
     public function deixarSeguirUsuario($id_usuario_seguindo) {
         $query = 'delete from usuarios_seguidores where id_usuario = :id_usuario and id_usuario_seguindo = :id_usuario_seguindo';
         $stmt = $this->db->prepare($query);

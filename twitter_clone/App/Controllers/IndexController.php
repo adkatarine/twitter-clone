@@ -14,6 +14,9 @@ class IndexController extends Action {
 		$this->render('index');
 	}
 
+	/**
+	 * Redireciona para tela de cadastro.
+	 */
 	public function inscreverse() {
 
 		$this->view->usuario = array(
@@ -25,6 +28,10 @@ class IndexController extends Action {
 		$this->render('inscreverse');
 	}
 
+	/**
+	 * Realiza o cadastro do usuário caso seja validado e não houver outro cadastro com mesmo email. Caso ocorra 
+	 * algum erro, um alerta é emitido na tela de cadastro.
+	 */
 	public function registrar() {
 
 		$usuario = Container::getModel('Usuario');
